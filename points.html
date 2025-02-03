@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Points</title>
+    <script>
+        async function loadPoints() {
+            let userId = localStorage.getItem("user_id");
+            if (!userId) {
+                alert("กรุณาเข้าสู่ระบบ");
+                window.location.href = "index.html";
+                return;
+            }
+
+            let apiUrl = "https://wcxoomyrskzvfwbncwir.supabase.co/rest/v1/transactions"; // เปลี่ยนเป็นของจริง
+            let apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjeG9vbXlyc2t6dmZ3Ym5jd2lyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg0NzM2NTUsImV4cCI6MjA1NDA0OTY1NX0.2Wmq0pBB_PU-PkMWRbOOcwWyVGHHQAkqB3R6-xKixQg"; // ใช้ API Key จริง
+
+            let response = await fetch(apiUrl + "?user_id=eq." + userId, {
+                method: "GET",
+                headers: {
+                    "apikey": apiKey,
+                    "Authorization": "Bearer " + apiKey,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            let data = await response.json();
+            let totalBottles = data.reduce((sum, item) => sum + item.bottles, 0);
+            let totalCans = data.reduce((sum, item) => sum + item.cans, 0);
+            let totalPoints = (totalCans * 2) + totalBottles; // คำนวณแต้มรวม
+
+            document.getElementById("user_id").innerText = userId;
+            document.getElementById("bottles").innerText = totalBottles;
+            document.getElementById("cans").innerText = totalCans;
+            document.getElementById("points").innerText = totalPoints; // แสดงผลแต้มรวม
+        }
+    </script>
+</head>
+<body onload="loadPoints()">
+    <h2>User Points</h2>
+    <p>User ID: <span id="user_id"></span></p>
+    <p>Total Bottles: <span id="bottles">0</span></p>
+    <p>Total Cans: <span id="cans">0</span></p>
+    <p><strong>Total Points:</strong> <span id="points">0</span></p> <!-- เพิ่มแสดงแต้มรวม -->
+</body>
+</html>

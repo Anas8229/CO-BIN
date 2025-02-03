@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Login</title>
+    <script>
+        window.onload = function () {
+            // ตรวจสอบว่ามี user_id ใน URL หรือไม่
+            const urlParams = new URLSearchParams(window.location.search);
+            const userIdFromQR = urlParams.get("user_id");
+
+            if (userIdFromQR) {
+                document.getElementById("user_id").value = userIdFromQR; // เติมอัตโนมัติ
+            }
+        };
+
+        async function login() {
+            let userId = document.getElementById("user_id").value;
+            let password = document.getElementById("password").value;
+
+            if (!userId || !password) {
+                alert("กรุณากรอก User ID และรหัสผ่าน");
+                return;
+            }
+
+            try {
+                let response = await fetch("https://wcxoomyrskzvfwbncwir.supabase.co/rest/v1/users?user_id=eq." + userId, {
+                    method: "GET",
+                    headers: {
+                        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjeG9vbXlyc2t6dmZ3Ym5jd2lyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg0NzM2NTUsImV4cCI6MjA1NDA0OTY1NX0.2Wmq0pBB_PU-PkMWRbOOcwWyVGHHQAkqB3R6-xKixQg",
+                        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjeG9vbXlyc2t6dmZ3Ym5jd2lyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg0NzM2NTUsImV4cCI6MjA1NDA0OTY1NX0.2Wmq0pBB_PU-PkMWRbOOcwWyVGHHQAkqB3R6-xKixQg",
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                let data = await response.json();
+
+                if (data.length > 0 && data[0].password === password) {
+                    localStorage.setItem("user_id", userId);
+                    window.location.href = "points.html"; // ไปหน้าคะแนน
+                } else {
+                    alert("Username หรือ Password ไม่ถูกต้อง");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Mock Login</h2>
+    <input type="text" id="user_id" placeholder="Enter User ID">
+    <br>
+    <input type="password" id="password" placeholder="Enter Password">
+    <br>
+    <button onclick="login()">Login</button>
+</body>
+</html>
