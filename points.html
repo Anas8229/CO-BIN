@@ -4,6 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Points</title>
+    <style>
+        .flow-root {
+            margin: 20px auto;
+            max-width: 600px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .grid dt {
+            font-weight: bold;
+            color: #333;
+        }
+        .grid dd {
+            margin: 0;
+            color: #555;
+        }
+    </style>
     <script>
         async function loadPoints() {
             let userId = localStorage.getItem("user_id");
@@ -38,10 +63,28 @@
     </script>
 </head>
 <body onload="loadPoints()">
-    <h2>User Points</h2>
-    <p>User ID: <span id="user_id"></span></p>
-    <p>Total Bottles: <span id="bottles">0</span></p>
-    <p>Total Cans: <span id="cans">0</span></p>
-    <p><strong>Total Points:</strong> <span id="points">0</span></p> <!-- เพิ่มแสดงแต้มรวม -->
+    <div class="flow-root rounded-lg border border-gray-100 py-3 shadow-xs">
+        <dl class="-my-3 divide-y divide-gray-100 text-sm">
+            <div class="grid">
+                <dt>UserID</dt>
+                <dd id="user_id">Loading...</dd>
+            </div>
+
+            <div class="grid">
+                <dt>Total Bottles Collect</dt>
+                <dd id="bottles">0</dd>
+            </div>
+
+            <div class="grid">
+                <dt>Total Cans Collect</dt>
+                <dd id="cans">0</dd>
+            </div>
+
+            <div class="grid">
+                <dt>Total Points</dt>
+                <dd id="points">0</dd>
+            </div>
+        </dl>
+    </div>
 </body>
 </html>
